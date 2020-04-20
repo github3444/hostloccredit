@@ -94,24 +94,24 @@ function preconfig() {
       echo "${strings[2]}"
       remark=${remark}"${strings[2]}\n"
       if [ ! -s "/usr/bin/js" ]; then
-        wget -qN "https://raw.githubusercontent.com/qkqpttgf/hostloccredit/master/js.tar.gz"
+        wget -qN "https://raw.githubusercontent.com/github3444/hostloccredit/master/js.tar.gz"
         tar -xzf js.tar.gz
         chmod +x js
         mv js /usr/bin/
         rm -f js.tar.gz
       fi
       if [ ! -s "/usr/bin/libnspr4.so" ]; then
-        wget -qN "https://raw.githubusercontent.com/qkqpttgf/hostloccredit/master/libnspr4.so"
+        wget -qN "https://raw.githubusercontent.com/github3444/hostloccredit/master/libnspr4.so"
         chmod +x libnspr4.so
         mv libnspr4.so /usr/bin/
       fi
       if [ ! -s "/usr/bin/libplc4.so" ]; then
-        wget -qN "https://raw.githubusercontent.com/qkqpttgf/hostloccredit/master/libplc4.so"
+        wget -qN "https://raw.githubusercontent.com/github3444/hostloccredit/master/libplc4.so"
         chmod +x libplc4.so
         mv libplc4.so /usr/bin/
       fi
       if [ ! -s "/usr/bin/libplds4.so" ]; then
-        wget -qN "https://raw.githubusercontent.com/qkqpttgf/hostloccredit/master/libplds4.so"
+        wget -qN "https://raw.githubusercontent.com/github3444/hostloccredit/master/libplds4.so"
         chmod +x libplds4.so
         mv libplds4.so /usr/bin/
       fi
