@@ -74,7 +74,7 @@ strings[4]="论坛元老"
 
 function preconfig() {
   tmp=${workdir}/tmp
-  curl -s -H "$UA" "https://www.hostloc.com/" | grep "slowAES">${tmp}
+  curl -s -H "$UA" "https://hostloc.com/" | grep "slowAES">${tmp}
   if [ -s "${tmp}" ]; then
     echo -n $(date "+%F %T %A") "${strings[0]}"
     remark="${strings[0]}"
@@ -138,14 +138,14 @@ function preconfig() {
     echo>>${precookiefile}
     for key1 in ${!cookies[@]}
     do
-    		[ g"$key1" = g"path" ] || echo -e "www.hostloc.com\tFALSE\t${cookies['path']}\tFALSE\t0\t${key1}\t${cookies[$key1]}">>${precookiefile}
+    		[ g"$key1" = g"path" ] || echo -e "hostloc.com\tFALSE\t${cookies['path']}\tFALSE\t0\t${key1}\t${cookies[$key1]}">>${precookiefile}
     done
     echo 
   fi
   rm -f ${tmp}
 
-  newuserspace=`curl -s -b ${precookiefile} https://www.hostloc.com/forum.php | grep -oE "欢迎新会员: <em><a href=\".*\" " | awk -F'\"' '{print $2}'`
-  maxuid=`curl -s -b ${precookiefile} https://www.hostloc.com/${newuserspace} | grep "空间首页" | awk -F 'uid=' '{print $2}' | awk -F '&' '{print $1}'`
+  newuserspace=`curl -s -b ${precookiefile} https://hostloc.com/forum.php | grep -oE "欢迎新会员: <em><a href=\".*\" " | awk -F'\"' '{print $2}'`
+  maxuid=`curl -s -b ${precookiefile} https://hostloc.com/${newuserspace} | grep "空间首页" | awk -F 'uid=' '{print $2}' | awk -F '&' '{print $1}'`
   tmpuid=$((maxuid-100))
 
   startuid=0
@@ -162,27 +162,27 @@ function login() {
   echo -n $(date "+%Y-%m-%d %H:%M:%S %A") ${username} 登陆... 
   #echo ${cookiefile}
   data="mod=logging&action=login&loginsubmit=yes&infloat=yes&lssubmit=yes&inajax=1&fastloginfield=username&username=$username&cookietime=$(shuf -i 1234567-7654321 -n 1)&password=$password&quickforward=yes&handlekey=ls"
-  curl -s -H "$UA" -c ${cookiefile} -b ${precookiefile} --data "$data" "https://www.hostloc.com/member.php" | grep "hostloc" >/dev/null && echo "成功" || status=1
+  curl -s -H "$UA" -c ${cookiefile} -b ${precookiefile} --data "$data" "https://hostloc.com/member.php" | grep "hostloc" >/dev/null && echo "成功" || status=1
   if [ ${status} -eq 1 ]; then
     echo "失败"
     remark=${remark}${user1}" 登陆失败\n"
     ((lnum++))
     continue
   fi
-  yourgroup=(`curl -s -H "$UA" -b ${cookiefile} "https://www.hostloc.com/forum.php" | grep "用户组" | awk -F ':' '{print $2}' | awk -F '<' '{print $1}'`)
+  yourgroup=(`curl -s -H "$UA" -b ${cookiefile} "https://hostloc.com/forum.php" | grep "用户组" | awk -F ':' '{print $2}' | awk -F '<' '{print $1}'`)
   userlevel[${username}]=${yourgroup[0]}
-  youruid=(`curl -s -H "$UA" -b ${cookiefile} "https://www.hostloc.com/home.php?mod=spacecp&ac=credit" | grep -oE "uid=\w*" | awk -F '[=]' '{print $2}'`)
+  youruid=(`curl -s -H "$UA" -b ${cookiefile} "https://hostloc.com/home.php?mod=spacecp&ac=credit" | grep -oE "uid=\w*" | awk -F '[=]' '{print $2}'`)
   userUID[${username}]=${youruid[0]}
   echo $(date "+%F %T %A") "${userlevel[${username}]}(UID：${userUID[${username}]})"
 }
 
 function logout() {
-  logoutlink=`curl -s -H "$UA" -b ${cookiefile} "https://www.hostloc.com/space-username-${user1}.html" | grep "退出" | awk -F '"' '{print $2}'`
+  logoutlink=`curl -s -H "$UA" -b ${cookiefile} "https://hostloc.com/space-username-${user1}.html" | grep "退出" | awk -F '"' '{print $2}'`
   logoutlink=${logoutlink//&amp;/&}
   #echo ${logoutlink}
   echo -n $(date "+%Y-%m-%d %H:%M:%S %A")
   echo -n " ${user1} "
-  curl -s -H "$UA" -b ${cookiefile} "https://www.hostloc.com/${logoutlink}" | grep -o "您已退出站点"
+  curl -s -H "$UA" -b ${cookiefile} "https://hostloc.com/${logoutlink}" | grep -o "您已退出站点"
   rm -f ${cookiefile}
   echo 
   sleep ${delaytime}
@@ -219,7 +219,7 @@ function randuid() {
 }
 
 function credit() {
-  creditall=$(curl -s -H "$UA" -b ${cookiefile} "https://www.hostloc.com/home.php?mod=spacecp&ac=credit&op=base" | grep -oE "积分: </em>\w*" | awk -F'[>]' '{print $2}')
+  creditall=$(curl -s -H "$UA" -b ${cookiefile} "https://hostloc.com/home.php?mod=spacecp&ac=credit&op=base" | grep -oE "积分: </em>\w*" | awk -F'[>]' '{print $2}')
   echo $(date "+%Y-%m-%d %H:%M:%S %A") 目前积分：${creditall}
 }
 
@@ -235,7 +235,7 @@ function view() {
     viewuidL=${viewuidL:0-${#maxuid}}
     sleep ${delaytime}
     echo -n "$(date "+%Y-%m-%d %H:%M:%S %A")" "${viewuidL}"
-    curl -s -H "$UA" -b ${cookiefile} "https://www.hostloc.com/space-uid-${viewuid[$a]}.html" | grep -o "最近访客" >/dev/null && p=1 || echo " banlist"
+    curl -s -H "$UA" -b ${cookiefile} "https://hostloc.com/space-uid-${viewuid[$a]}.html" | grep -o "最近访客" >/dev/null && p=1 || echo " banlist"
     if [ $p -eq 1 ]; then
       ((a++))
       echo -e ",\tok\t$a"
